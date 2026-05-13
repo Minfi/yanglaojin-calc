@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>城乡居民养老金测算</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500&family=Noto+Sans+SC:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="hd">
+  <span class="hd-i">&#x1F3E0;</span>
+  <h1>城乡居民养老金测算</h1>
+  <p>基本险 · 补充险 · 多方案对比 · 投资回报</p>
+</div>
+<div class="pb">
+  <b>&#x1F4DC; </b>城乡居民养老保险分
+  <span class="tg">基本养老险</span>（10档，200&#x2013;5000&#x5143;/年，<b>60岁</b>起领）和
+  <span class="tg">补充养老险</span>（5档，200&#x2013;5000&#x5143;/年，<b>65岁</b>起领）。<br>
+  &#x1F4B0; 按年缴费可获<span class="tg">政府补贴</span>（补缴无补贴）；
+  缴费超15年部分，每多1年<span class="tg">月领+1元</span>。<br>
+  &#x1F466; <span class="tg">子女资助</span>：子女可资助父母缴纳养老险，资助金额计入个人账户，
+  享受复利增值，<b>无额外补贴</b>。基本险子女资助从当前年份至60岁前，补充险子女资助从60岁至65岁前，
+  60岁前两者可<b>同步缴纳</b>。<br>
+  &#x1F3D4;&#xFE0F; 本测算工具<b>适用山西省</b>城乡居民养老保险政策，
+  计发月数（基本险139、补充险120）、基础养老金、补贴标准均采用山西省统一标准。
+</div>
+<div class="tb">
+  <button class="on" onclick="sw('input')">&#x1F4DD; 填写</button>
+  <button onclick="sw('result')">&#x1F4CA; 结果</button>
+  <button onclick="sw('compare')">&#x2696;&#xFE0F; 对比</button>
+</div>
+<div class="main">
+  <!-- INPUT SECTION -->
+  <div class="sec on" id="s-input">
+    <div class="pb2">
+      <label>方案：</label>
+      <div class="ptabs" id="ptabs"></div>
+      <button class="padd" onclick="addP()">+新增</button>
+      <button class="pdel" id="pdel">删除</button>
+    </div>
+    <!-- 基本信息 -->
+    <div class="fc" id="fc-basic">
+      <div class="fch" onclick="tgCard('fc-basic')">
+        <div class="fch-ic" style="background:#fdf0e0;">&#x1F464;</div>
+        <h3>基本信息</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb c3">
+        <div class="fld">
+          <label>出生年份 <span class="rq">*</span></label>
+          <input type="number" id="vBy" value="1971" min="1940" max="2010" oninput="rh();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>当前年份 <span class="tp">自动填充</span></label>
+          <input type="number" id="vCy" value="2026" min="2020" max="2040" oninput="rh();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>方案名称</label>
+          <input type="text" id="vPn" placeholder="方案A/基础保障">
+        </div>
+        <div class="fld fl"><div class="hv" id="hAge">&#x1F305; 60岁：2031年 · 65岁：2036年</div></div>
+      </div>
+    </div>
+    <div class="f2c">
+    <!-- 基本险历史 -->
+    <div class="fc fc-b" id="fc-bh">
+      <div class="fch" onclick="tgCard('fc-bh')">
+        <div class="fch-ic" style="background:#fff8ed;">&#x1F4CB;</div>
+        <h3>基本险 · 历史缴费</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb">
+        <div class="sl">&#x1F4D6; 正常缴费记录</div>
+        <div class="fld">
+          <label>开始缴费年份</label>
+          <input type="number" id="vBhs" value="2011" min="1990" max="2040" oninput="rcB();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>最晚缴费年份</label>
+          <input type="number" id="vBhe" value="2022" min="1990" max="2040" oninput="rcB();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld fl"><div class="hv" id="hByr">&#x1F4CC; 正常缴费 12 年（2011—2022）</div></div>
+        <div class="fld fl">
+          <label>每年缴费金额</label>
+          <select id="vBha" onchange="rsG()">
+            <option value="200">200元/年（补贴35元）</option>
+            <option value="300">300元/年（补贴40元）</option>
+            <option value="500">500元/年（补贴60元）</option>
+            <option value="700">700元/年（补贴80元）</option>
+            <option value="1000">1000元/年（补贴100元）</option>
+            <option value="1500">1500元/年（补贴140元）</option>
+            <option value="2000">2000元/年（补贴180元）</option>
+            <option value="3000">3000元/年（补贴220元）</option>
+            <option value="4000">4000元/年（补贴260元）</option>
+            <option value="5000" selected>5000元/年（补贴300元）</option>
+          </select>
+        </div>
+        <div class="sl">&#x26A0;&#xFE0F; 断缴补缴（补缴无补贴！）</div>
+        <div class="fld fl">
+          <div class="opt">
+            <input type="checkbox" id="cBg" onchange="tgGap('bg')">
+            <label for="cBg">需要补缴断缴年份</label>
+          </div>
+        </div>
+        <div id="bgFld" style="display:none;grid-column:1/-1;grid-template-columns:1fr 1fr;gap:6px;">
+          <div class="fld">
+            <label>断缴年数</label>
+            <input type="number" id="vBgn" value="3" min="0" max="20">
+          </div>
+          <div class="fld">
+            <label>补缴金额（每年）</label>
+            <select id="vBga">
+              <option value="200">200元/年</option>
+              <option value="500">500元/年</option>
+              <option value="1000">1000元/年</option>
+              <option value="2000">2000元/年</option>
+              <option value="3000">3000元/年</option>
+              <option value="5000" selected>5000元/年</option>
+            </select>
+          </div>
+          <div class="fld fl">
+            <label>一次性补缴年份</label>
+            <div class="ro" id="hBgy">2026年</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 补充险历史 -->
+    <div class="fc fc-s" id="fc-sh">
+      <div class="fch" onclick="tgCard('fc-sh')">
+        <div class="fch-ic" style="background:#f0faf4;">&#x1F4CB;</div>
+        <h3>补充险 · 历史缴费</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb">
+        <div class="sl">&#x1F4D6; 正常缴费记录</div>
+        <div class="fld">
+          <label>开始缴费年份</label>
+          <input type="number" id="vShs" value="2021" min="1990" max="2040" oninput="rcS();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>最晚缴费年份</label>
+          <input type="number" id="vShe" value="2021" min="1990" max="2040" oninput="rcS();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld fl"><div class="hv" id="hSyr">&#x1F4CC; 正常缴费 1 年（2021—2021）</div></div>
+        <div class="fld fl">
+          <label>每年缴费金额</label>
+          <select id="vSha" onchange="rsG()">
+            <option value="200">200元/年（补贴70元）</option>
+            <option value="500">500元/年（补贴120元）</option>
+            <option value="1000">1000元/年（补贴200元）</option>
+            <option value="2000">2000元/年（补贴360元）</option>
+            <option value="5000" selected>5000元/年（补贴600元）</option>
+          </select>
+        </div>
+        <div class="sl">&#x26A0;&#xFE0F; 断缴补缴（补缴无补贴！）</div>
+        <div class="fld fl">
+          <div class="opt">
+            <input type="checkbox" id="cSg" onchange="tgGap('sg')">
+            <label for="cSg">需要补缴断缴年份</label>
+          </div>
+        </div>
+        <div id="sgFld" style="display:none;grid-column:1/-1;grid-template-columns:1fr 1fr;gap:6px;">
+          <div class="fld">
+            <label>断缴年数</label>
+            <input type="number" id="vSgn" value="4" min="0" max="20">
+          </div>
+          <div class="fld">
+            <label>补缴金额（每年）</label>
+            <select id="vSga">
+              <option value="200">200元/年</option>
+              <option value="500">500元/年</option>
+              <option value="1000">1000元/年</option>
+              <option value="2000">2000元/年</option>
+              <option value="5000" selected>5000元/年</option>
+            </select>
+          </div>
+          <div class="fld fl">
+            <label>一次性补缴年份</label>
+            <div class="ro" id="hSgy">2026年</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 基本险未来缴费 -->
+    <div class="fc fc-b" id="fc-bf">
+      <div class="fch" onclick="tgCard('fc-bf')">
+        <div class="fch-ic" style="background:#fff3e0;">&#x1F4B0;</div>
+        <h3>基本险 · 未来正常缴费</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb">
+        <div class="fld">
+          <label>开始缴费年份</label>
+          <input type="number" id="vBfs" value="2026" min="2020" max="2040" oninput="rcBF();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>截止年份</label>
+          <div class="ro" id="hBfe">2031年（60岁所在年份）</div>
+        </div>
+        <div class="fld fl">
+          <label>每年缴费金额</label>
+          <select id="vBfa" onchange="rsG()">
+            <option value="200">200元/年（补贴35元）</option>
+            <option value="300">300元/年（补贴40元）</option>
+            <option value="500">500元/年（补贴60元）</option>
+            <option value="700">700元/年（补贴80元）</option>
+            <option value="1000">1000元/年（补贴100元）</option>
+            <option value="1500">1500元/年（补贴140元）</option>
+            <option value="2000">2000元/年（补贴180元）</option>
+            <option value="3000">3000元/年（补贴220元）</option>
+            <option value="4000">4000元/年（补贴260元）</option>
+            <option value="5000" selected>5000元/年（补贴300元）</option>
+          </select>
+        </div>
+        <div class="fld fl"><div class="hv" id="hBgs">&#x1F4CC; 政府补贴：300元/年 × 6年 = 1800元</div></div>
+        <div class="fld fl">
+          <label>子女资助基本险（选填，无补贴，从当年起至60岁当年逐年缴纳）</label>
+          <select id="vBc" onchange="rcC()">
+            <option value="0" selected>不选择子女资助</option>
+            <option value="200">200元/年</option>
+            <option value="500">500元/年</option>
+            <option value="1000">1000元/年</option>
+            <option value="2000">2000元/年</option>
+            <option value="3000">3000元/年</option>
+            <option value="5000">5000元/年</option>
+          </select>
+        </div>
+        <div class="fld fl"><div class="hv" id="hBc">&#x1F4CC; 子女资助基本险：当年起至60岁生日当月前缴完，次月领养老金</div></div>
+      </div>
+    </div>
+    <!-- 补充险未来 -->
+    <div class="fc fc-s" id="fc-sf">
+      <div class="fch" onclick="tgCard('fc-sf')">
+        <div class="fch-ic" style="background:#e8f5fe;">&#x1F4B0;</div>
+        <h3>补充险 · 未来正常缴费</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb">
+        <div class="fld">
+          <label>开始缴费年份</label>
+          <input type="number" id="vSfs" value="2026" min="2020" max="2040" oninput="rcSF();vYr(this)" maxlength="4">
+        </div>
+        <div class="fld">
+          <label>截止年份</label>
+          <div class="ro" id="hSfe">2036年（65岁所在年份）</div>
+        </div>
+        <div class="fld fl">
+          <label>每年缴费金额</label>
+          <select id="vSfa" onchange="rsG()">
+            <option value="200">200元/年（补贴70元）</option>
+            <option value="500">500元/年（补贴120元）</option>
+            <option value="1000">1000元/年（补贴200元）</option>
+            <option value="2000">2000元/年（补贴360元）</option>
+            <option value="5000" selected>5000元/年（补贴600元）</option>
+          </select>
+        </div>
+        <div class="fld fl"><div class="hv" id="hSgs">&#x1F4CC; 政府补贴：600元/年 × 10年 = 6000元</div></div>
+        <div class="fld fl">
+          <label>子女资助补充险（选填，无补贴，从当年起至65岁当年逐年缴纳）</label>
+          <select id="vSc" onchange="rcC()">
+            <option value="0" selected>不选择子女资助</option>
+            <option value="200">200元/年</option>
+            <option value="500">500元/年</option>
+            <option value="1000">1000元/年</option>
+            <option value="2000">2000元/年</option>
+            <option value="3000">3000元/年</option>
+            <option value="5000">5000元/年</option>
+          </select>
+        </div>
+        <div class="fld fl"><div class="hv" id="hSc">&#x1F4CC; 子女资助补充险：当年起至65岁生日当月前缴完，次月领养老金；</div></div>
+      </div>
+    </div>
+    </div>
+    <!-- 待遇参数 -->
+    <div class="fc" id="fc-pen">
+      <div class="fch" onclick="tgCard('fc-pen')">
+        <div class="fch-ic" style="background:#fef8e8;">&#x1F3E0;</div>
+        <h3>养老金待遇参数</h3>
+        <span class="ctg">&#x25BC;</span>
+      </div>
+      <div class="fcb c4">
+        <div class="fld">
+          <label>基础养老金 <span class="tp">政府统一发放</span></label>
+          <div class="irow"><span class="iv" id="vBp">176</span><span class="iu">元/月</span></div>
+        </div>
+        <div class="fld">
+          <label>高龄补贴 <span class="tp">65岁后</span></label>
+          <div class="irow"><span class="iv" id="vEb">5</span><span class="iu">元/月</span></div>
+        </div>
+        <div class="fld">
+          <label>补充险出口补贴 <span class="tp">65岁起</span></label>
+          <div class="irow"><span class="iv" id="vEs">20</span><span class="iu">元/月</span></div>
+        </div>
+        <div class="fld">
+          <label>年限养老金起算 <span class="tp">超此年限才加成</span></label>
+          <div class="irow"><span class="iv" id="vYb">15</span><span class="iu">年</span></div>
+        </div>
+        <div class="fld">
+          <label>计发月数·基本险 <span class="tp">山西统一</span></label>
+          <div class="irow"><span class="iv">139</span><span class="iu">个月</span></div>
+        </div>
+        <div class="fld">
+          <label>计发月数·补充险 <span class="tp">山西统一</span></label>
+          <div class="irow"><span class="iv">120</span><span class="iu">个月</span></div>
+        </div>
+        <div class="fld">
+          <label>年化复利 <span class="tp">山西社保计息</span></label>
+          <div class="irow"><span class="iv">3.55</span><span class="iu">%</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cw"><button class="cb" onclick="calc()">&#x1F50D; 开始测算</button></div>
+  </div>
+  <!-- RESULT SECTION -->
+  <div class="sec" id="s-result"><div id="rContent"></div></div>
+  <!-- COMPARE SECTION -->
+  <div class="sec" id="s-compare"><div id="cContent"></div></div>
+</div><!-- end main -->
+
+
+
+<div id="toast" class="to"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script src="calc.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
